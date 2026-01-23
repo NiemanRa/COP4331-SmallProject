@@ -4,6 +4,7 @@
  * please attach correct response code as well (500 = general error, 403 = unauthenticated)
  */
 declare(strict_types=1);
+error_reporting(E_ERROR | E_PARSE);
 
 // GET for contacts/search
 $requestType = $_SERVER['REQUEST_METHOD'];
@@ -13,25 +14,24 @@ if ($requestType === "POST") {
         file_get_contents('php://input'),
         true
     );
-} else {
-    $searchTerm = $_GET["api"];
 }
 
 if (!$searchTerm && $requestType === "GET") {
     header('Content-Type: text/html; charset=utf-8');
-    $path = $_SERVER["PATH_INFO"];
-    $publicFile = "../PUBLIC/" . $path;
+    $publicFile = "../PUBLIC/" . $_SERVER["PATH_INFO"];
 
     if ($publicFile == "../PUBLIC/") {
         readfile("../PUBLIC/login.html");
+        exit;
     } elseif (file_exists($publicFile)) {
         readfile($publicFile);
     } else {
         http_response_code(404);
     }
     exit;
-} else {
+} elseif ($requestType === "GET") {
     // setup for json and post requests (assuming we use post for login)
+    $searchTerm = $_GET["api"];
     header('Content-Type: application/json');
 }
 
