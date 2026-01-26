@@ -1,5 +1,18 @@
 <?php
-namespace API\accRegister;
+declare(strict_types=1);
+
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+ini_set('error_log', __DIR__ . '/phpErrors.txt');
+error_reporting(E_ALL);
+
+$input = json_decode(
+    file_get_contents('php://input'),
+    true
+);
+
+header('Content-Type: application/json');
+
 
 require './components/db.php';
 
@@ -33,8 +46,7 @@ function processRegistration(string $username, string $pass){
     // we can remove this if MYSQL already hashes + salts? I don't think it does.
     // just remembering from writing in node.js that storing plain text is bad
     $hash = password_hash($pass, PASSWORD_DEFAULT);
-
-    // $pdo::prepare("INSERT INTO users (username, password, )");
+    // $pdo::prepare("INSERT INTO users (username, password_hash, email, last_name, first_name) VALUES ( )");
 
     try{
         // sql here
