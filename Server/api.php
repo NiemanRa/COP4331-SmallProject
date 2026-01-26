@@ -4,7 +4,16 @@
  * please attach correct response code as well (500 = general error, 403 = unauthenticated)
  */
 declare(strict_types=1);
-error_reporting(E_ERROR | E_PARSE);
+
+/*
+ * we can also use ini_set(display_errors, 0)
+ * then use the tag log_errors (1) w/ error_log, __DIR__ . /phpErrors.txt for document logging
+ * error_reporting(E_ALL) // reports everything
+ */
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+ini_set('error_log', __DIR__ . '/phpErrors.txt');
+error_reporting(E_ALL);
 
 // GET for contacts/search
 $requestType = $_SERVER['REQUEST_METHOD'];
@@ -14,22 +23,7 @@ if ($requestType === "POST") {
         file_get_contents('php://input'),
         true
     );
-}
-
-if (!$searchTerm && $requestType === "GET") {
-    header('Content-Type: text/html; charset=utf-8');
-    $publicFile = "../PUBLIC/" . $_SERVER["PATH_INFO"];
-
-    if ($publicFile == "../PUBLIC/") {
-        readfile("../PUBLIC/login.html");
-        exit;
-    } elseif (file_exists($publicFile)) {
-        readfile($publicFile);
-    } else {
-        http_response_code(404);
-    }
-    exit;
-} elseif ($requestType === "GET") {
+} else {
     // setup for json and post requests (assuming we use post for login)
     $searchTerm = $_GET["api"];
     header('Content-Type: application/json');
@@ -37,18 +31,13 @@ if (!$searchTerm && $requestType === "GET") {
 
 require './components/db.php';
 
-// he said in project file that we should have a max of 2 apis, but preferred one. I guess this is how?
 if (!$searchTerm){
     http_response_code(404);
     echo json_encode(["error" => "No API provided"]);
     exit;
 } else {
     switch ($searchTerm) {
-        case 'login': // post
-            break;
-        case 'register': // post
-            require './components/register.php';
-            API\accRegister\processRegistration($input['username'], $input['password']);
+        case 'edit':
             break;
         case 'contacts':
             break;

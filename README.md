@@ -13,7 +13,7 @@ Disclaimer, we haven't met in person yet so I understand none of this is final, 
 2. Open a terminal window in ./Server
 3. Run ``docker run --name test-sql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:latest`` as an administrator
 4. Run ``docker exec test-sql mysql -uroot -proot -e "CREATE DATABASE test;"`` as an administrator
-5. Run ``php -S localhost:8000 index.php``
+5. Run ``php -S localhost:8000``
    1. You might encounter an issue when loading the page, "Connection failed...", this is because docker set your container port to something else.
    2. Run ``docker ps``, then notice the "PORTS" column
    3. If you see 0.0.0.0:OTHERPORT -> 3306/tcp, your port was set to OTHERPORT for access.
