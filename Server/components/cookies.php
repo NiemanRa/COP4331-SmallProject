@@ -13,12 +13,9 @@ function createCookie (\PDO $pdo, string $userId) {
 
     $expires = time() + (60 * 60 * 24);
 
-    // expiration date must be saved
-    // temp table until we make one up
-    // need to declare this for my ide
+    // expiration date isn't being stored so sessions are basically permanent (in our db)
     $message = $pdo->prepare("UPDATE users SET token = ? WHERE id = ?");
     $message->execute([$token, $userId]);
-    //
 
     if ($message->rowCount() <= 0) {
         http_response_code(500);
@@ -66,7 +63,7 @@ function checkCookie (\PDO $pdo, string $token): int {
     }
 
     $cookieObj = $message->fetch(\PDO::FETCH_OBJ);
-    if ($cookieObj->expires < time()) {
+    /*if ($cookieObj->expires < time()) {
         deleteCookie($pdo, $token);
 
         http_response_code(401);
@@ -77,6 +74,7 @@ function checkCookie (\PDO $pdo, string $token): int {
     // we can update expirations here later if we want
 
     //
+    */
 
-    return $cookieObj->user_id;
+    return $cookieObj->id;
 }
