@@ -12,3 +12,10 @@
  *
  *
  */
+
+/*  Add sql query
+*   $sql = "
+*   INSERT INTO contacts (first_name, last_name, email, personal_phone, work_phone)
+*   VALUES (?, ?, ?, ?, ?, ?);
+*    ";
+*/
