@@ -13,18 +13,36 @@ function createCookie (\PDO $pdo, string $userId) {
 
     $expires = time() + (60 * 60 * 24);
 
-    // expiration date must be saved
-    // temp table until we make one up
-    // need to declare this for my ide
-    $message = $pdo->prepare("INSERT INTO sessions (user_id, token, expires) VALUES (?, ?, ?)");
-    $message->execute([$userId, $token, $expires]);
-    //
+    // expiration date isn't being stored so sessions are basically permanent (in our db)
+    $message = $pdo->prepare("UPDATE users SET token = ? WHERE id = ?");
+    $message->execute([$token, $userId]);
+
+    if ($message->rowCount() <= 0) {
+        http_response_code(500);
+        echo json_encode(["error" => "No user was found with id" . $userId]);
+        exit;
+    }
 
     setcookie('authentication', $token, $expires, '/', '', false, true);
 }
 
 function deleteCookie (\PDO $pdo, string $token) {
+    if (empty($_token)) {
+        http_response_code(401);
+        echo json_encode(["error" => "Authentication cookie not provided"]);
+        exit;
+    }
 
+    $message = $pdo->prepare("UPDATE users SET token = ? WHERE token = ?");
+    $message->execute(["", $token]);
+
+    if ($message->rowCount() <= 0) {
+        http_response_code(500);
+        echo json_encode(["error" => "No user was found with id" . $token]);
+        exit;
+    }
+
+    setcookie('authentication', "", time() - 1000, "/", "", false, true);
 }
 
 // https://www.php.net/manual/en/pdostatement.fetch.php
@@ -35,7 +53,7 @@ function checkCookie (\PDO $pdo, string $token): int {
         exit;
     }
 
-    $message = $pdo->prepare("SELECT * FROM sessions WHERE token = ?");
+    $message = $pdo->prepare("SELECT * FROM users WHERE token = ?");
     $message->execute([$token]);
 
     if ($message->rowCount() === 0) {
@@ -45,7 +63,7 @@ function checkCookie (\PDO $pdo, string $token): int {
     }
 
     $cookieObj = $message->fetch(\PDO::FETCH_OBJ);
-    if ($cookieObj->expires < time()) {
+    /*if ($cookieObj->expires < time()) {
         deleteCookie($pdo, $token);
 
         http_response_code(401);
@@ -56,6 +74,7 @@ function checkCookie (\PDO $pdo, string $token): int {
     // we can update expirations here later if we want
 
     //
+    */
 
-    return $cookieObj->user_id;
+    return $cookieObj->id;
 }
