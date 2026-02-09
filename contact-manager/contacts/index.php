@@ -28,7 +28,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item me-2">
-                        <button class="btn btn-danger shadow" aria-current="page" style="border-width: 1px; border-color: #fdfdfd78;">Logout</button>
+                        <button class="btn btn-danger shadow" aria-current="page"
+                            style="border-width: 1px; border-color: #fdfdfd78;">Logout</button>
                     </li>
 
                 </ul>

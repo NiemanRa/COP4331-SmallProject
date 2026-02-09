@@ -41,7 +41,7 @@ try {
 
 if (!$is_logged_in) {
     http_response_code(401);
-    header('Location: ../login', true, 302);
+    header('Location: ../login', true);
     die();
 }
 ?>
