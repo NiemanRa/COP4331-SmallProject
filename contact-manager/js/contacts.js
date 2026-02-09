@@ -22,33 +22,37 @@ form.addEventListener("submit", (e) => {
         firstNameError.textContent = "";
     }
 
-    if (email.value === null || email.value === "") {
-        emailError.parentElement.classList.add("text-danger");
-        emailError.textContent = " is required*";
-        valid = false;
+    if (email.value !== "") {
+        const emailRegex = /^\S+@\S+\.\S+$/;
+        if (emailRegex.test(email.value) === false) {
+            emailError.parentElement.classList.add("text-danger");
+            emailError.textContent = " is invalid";
+            valid = false;
+        } else {
+        emailError.parentElement.classList.remove("text-danger");
+        emailError.textContent = "";
+        }
     } else {
         emailError.parentElement.classList.remove("text-danger");
         emailError.textContent = "";
     }
 
-    if (phoneNumber.value !== "") {
-        console.log(phoneNumber.value)
+    if (phoneNumber.value === null || phoneNumber.value === "") {
+        phoneNumberError.parentElement.classList.add("text-danger");
+        phoneNumberError.textContent = "is required*";
+        valid = false;
+    }  else {
         const phoneRegex = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$/;
         if (phoneRegex.test(phoneNumber.value) === false) {
-        phoneNumberError.parentElement.classList.add("text-danger");
-        phoneNumberError.textContent = "is invalid";
-        valid = false;
+            phoneNumberError.parentElement.classList.add("text-danger");
+            phoneNumberError.textContent = "is invalid";
         } else {
         phoneNumberError.parentElement.classList.remove("text-danger");
         phoneNumberError.textContent = "";
         }
-    }  else {
-        phoneNumberError.parentElement.classList.remove("text-danger");
-        phoneNumberError.textContent = "";
     }
 
     if (workNumber.value !== "") {
-        console.log(workNumber.value)
         const phoneRegex = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$/;
         if (phoneRegex.test(workNumber.value) === false) {
         workNumberError.parentElement.classList.add("text-danger");

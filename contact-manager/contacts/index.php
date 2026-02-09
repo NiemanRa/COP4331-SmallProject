@@ -54,7 +54,7 @@
                     </div>
                     <div class="d-flex flex-column">
                         <label>Email <span id="Email-Error"></span></label>
-                        <input id="Email" type="email">
+                        <input id="Email" type="text">
                     </div>
                     <div class="d-flex flex-column">
                         <label>Phone Number <span id="Phone-Number-Error"></span></label>
