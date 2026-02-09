@@ -46,23 +46,23 @@
                 <form id="Add-Contact-Form" class="modal-body d-flex flex-column justify-content-center px-5 gap-2">
                     <div class="d-flex flex-column">
                         <label>First Name <span id="First-Name-Error"></span></label>
-                        <input id="First" type="text"/>
+                        <input class="form-control" id="First" type="text"/>
                     </div>
                     <div class="d-flex flex-column">
                         <label>Last Name <span id="Last-Name-Error"></span></label>
-                        <input id="Last" type="text">
+                        <input class="form-control" id="Last" type="text">
                     </div>
                     <div class="d-flex flex-column">
                         <label>Email <span id="Email-Error"></span></label>
-                        <input id="Email" type="email">
+                        <input class="form-control" id="Email" type="email">
                     </div>
                     <div class="d-flex flex-column">
                         <label>Phone Number <span id="Phone-Number-Error"></span></label>
-                        <input id="Phone-Number" type="tel">
+                        <input class="form-control" id="Phone-Number" type="tel">
                     </div>
                     <div class="d-flex flex-column">
                         <label>Work Number <span id="Work-Number-Error"></span></label>
-                        <input id="Work-Number" type="tel">
+                        <input class="form-control" id="Work-Number" type="tel">
                     </div>
                     <button type="submit" class="btn btn-primary mt-3" id="Submit-Contact" >Save Contact</button>
                 </form>
@@ -119,7 +119,7 @@
             </div>
         </main>
     </container>
-    <script src="/js/contacts.js"></script>
+    <script src="../js/contacts.js"></script>
 </body>
 
 </html>

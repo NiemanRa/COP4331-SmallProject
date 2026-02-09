@@ -1,18 +1,11 @@
 <?php
-$env = parse_ini_file("../../../.env");
-$charset = "utf8";
-
-// Check if user is logged in
-$dsn = "mysql:host={$env['HOST']};port={$env['PORT']};dbname={$env['DB_NAME']};charset=$charset";
-$is_logged_in = false;
-$username = "";
-$firstName = "";
-$lastName = "";
-$userId = "";
+try {
+    require(__DIR__ . '/db.php');
+} catch (\Throwable $e) {
+    echo "Internal error loading page: " . $e->getMessage();
+}
 
 try {
-
-    $pdo = new PDO($dsn, $env["USER"], $env["PASSWORD"], $options);
 
     $sql = "SELECT token, username, first_name, last_name, id FROM users WHERE token = ?";
     $stmt = $pdo->prepare($sql);
