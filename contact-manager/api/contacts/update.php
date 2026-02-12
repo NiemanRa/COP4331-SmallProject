@@ -26,7 +26,7 @@ try{
     $update_query->bindParam(4, $req_data['personal_phone'], PDO::PARAM_STR);
     $update_query->bindParam(5, $req_data['work_phone'], PDO::PARAM_STR);
     $update_query->bindParam(6, $uid, PDO::PARAM_INT);
-    $update_query->bindParam(7, $req_data['contact_id'], PDO::PARAM_STR);
+    $update_query->bindParam(7, $req_data['contact_id'], PDO::PARAM_INT);
     $update_query->execute();
     // Return success
     echo json_encode([
