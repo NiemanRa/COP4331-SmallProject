@@ -80,7 +80,7 @@ async function addContact() {
         return value === "" ? null : value; 
     };
     try {
-        const response = await fetch("contact-manager/api/contacts/add.php", {
+        const response = await fetch("../api/contacts/add.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function searchContact(searchQuery, pagination) {
     try {
-        const response = await fetch("contact-manager/api/contacts/search.php", {
+        const response = await fetch("../api/contacts/search.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -188,7 +188,7 @@ document.getElementById("update-contact").addEventListener("click", () => {
 
 async function updateContact(contact) {
     try {
-        const response = await fetch("contact-manager/api/contacts/update.php", {
+        const response = await fetch("../api/contacts/update.php", {
             method:"POST",
             headers: {
                 "Content-Type": "application/json"
@@ -211,7 +211,7 @@ document.getElementById("delete-button").addEventListener("click", () => {
 
 async function deleteContact(contact_id) {
     try {
-        const response = await fetch("contact-manager/api/contacts/delete.php", {
+        const response = await fetch("../api/contacts/delete.php", {
             method:"DELETE",
             headers: {},
             body: JSON.stringify({
