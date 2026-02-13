@@ -149,24 +149,25 @@ function populateContacts(contacts) {
         const element = document.createElement("a");
         element.className = "w-100 p-2 text-decoration-none border-bottom border-start";
         element.id = `${contact.id}`
+        const arrayPosition = contacts.indexOf(contact);
         element.addEventListener("click", () => {
-            getContactDetails(contact.id, contacts);
+            getContactDetails(contact.id, contacts, arrayPosition);
         })
         element.textContent = `${contact.first_name}`;
         document.getElementById("contact-list").appendChild(element);
     });
 }
 
-function getContactDetails(contact_id, contacts) {
+function getContactDetails(contact_id, contacts, arrayPosition) {
     document.getElementById("contact-id").value = contact_id;
-    document.getElementById("first-name-div").textContent = `${contacts[contact_id-1].first_name}`;
-    document.getElementById("last-name-div").textContent = `${contacts[contact_id-1].last_name}`;
-    document.getElementById("phone-number-div").textContent = `Phone number: ${contacts[contact_id-1].personal_phone}`;
-    document.getElementById("work-number-div").textContent = `Work Number: ${contacts[contact_id-1].work_phone}`;
-    document.getElementById("email-div").textContent = `Email: ${contacts[contact_id-1].email}`;
+    document.getElementById("first-name-div").textContent = `${contacts[arrayPosition].first_name}`;
+    document.getElementById("last-name-div").textContent = `${contacts[arrayPosition].last_name}`;
+    document.getElementById("phone-number-div").textContent = `Phone number: ${contacts[arrayPosition].personal_phone}`;
+    document.getElementById("work-number-div").textContent = `Work Number: ${contacts[arrayPosition].work_phone}`;
+    document.getElementById("email-div").textContent = `Email: ${contacts[arrayPosition].email}`;
     document.getElementById("edit-contact").addEventListener("click", () => {
         document.getElementById("contact-id").value = contact_id;
-        document.getElementById("input-first-name").value = `${contacts[contact_id-1].first_name}`;
+        document.getElementById("input-first-name").value = `${contacts[arrayPosition].first_name}`;
         document.getElementById("input-last-name").value = `${contacts[0].last_name}`;
         document.getElementById("input-personal-number").value = `${contacts[0].personal_phone}`;
         document.getElementById("input-work-number").value = `${contacts[0].work_phone}`;
