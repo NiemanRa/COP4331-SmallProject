@@ -9,10 +9,10 @@ try {
 
     $sql = "SELECT token, username, first_name, last_name, id FROM users WHERE token = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$_COOKIE['token']]);
+    $stmt->execute([$_COOKIE['authentication']]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($result && $result['token'] === $_COOKIE['token']) {
+    if ($result && $result['token'] === $_COOKIE['authentication']) {
         $is_logged_in = true;
         $username = $result['username'];
         $firstName = $result['first_name'];
