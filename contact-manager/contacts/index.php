@@ -113,11 +113,11 @@ include_once("../api/components/validatesession.php");
             <aside class="w-sm-100 w-md-50 w-lg-25 d-flex flex-column h-100 border justify-content-between">
                 <div>
                     <div class="w-100 d-flex h-auto border-bottom">
-                        <div id="profileIcon" class="ratio ratio-1x1 p-4 m-2 rounded-circle overflow-hidden shadow"
+                        <!-- <div id="profileIcon" class="ratio ratio-1x1 p-4 m-2 rounded-circle overflow-hidden shadow"
                             style="height: 1vw; width: 1vw; background-color: rgb(181, 205, 224);">
                             <h2 class="text-white text-center"
                                 style="display: flex; align-items: center; justify-content: center;">J</h2>
-                        </div>
+                        </div> -->
                         <div id="contact-list" class="d-flex flex-column w-100">
                             <!-- contacts populate here -->
                         </div>
@@ -150,6 +150,7 @@ include_once("../api/components/validatesession.php");
                 <div id="phone-number-div">Phone number: (555)-555-5555</div>
                 <div id="work-number-div">Work Number: (123)-456-7890</div>
                 <div id="email-div">Email: Jdove@example.com</div>
+                <button>delete contact</button>
             </div>
         </main>
     </container>
