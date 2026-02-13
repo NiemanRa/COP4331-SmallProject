@@ -13,6 +13,7 @@
 // Requirements
 use function components\cookies\checkCookie;
 require '../components/db.php';
+require '../components/cookies.php';
 header("Content-Type: application/json; charset=utf-8");
 
 // Decode incoming request data
