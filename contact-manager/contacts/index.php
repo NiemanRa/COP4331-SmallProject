@@ -1,5 +1,5 @@
 <?php
-// include_once("../api/components/validatesession.php");
+include_once("../api/components/validatesession.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
 <body class="d-flex flex-column justify-content-center align-items-center vw-100 vh-100">
     <nav class="navbar fixed-top navbar-expand-lg vw-100 shadow light-blue">
         <div class="container-fluid">
-            <!-- <a class="navbar-brand text-white" href="#" id="userWelcome">Hello,<?php echo $firstName . " " . $lastName; ?>!</a> -->
+            <a class="navbar-brand text-white" href="#" id="userWelcome">Hello, <?php echo $firstName . " " . $lastName; ?>!</a>
             <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
