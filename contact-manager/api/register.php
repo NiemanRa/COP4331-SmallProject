@@ -23,6 +23,10 @@ $input = json_decode(
     true
 );
 
+$expires_time = time() + (5 * 60); // 5 minutes
+$gmt_expires = gmdate('D, d M Y H:i:s', $expires_time) . ' GMT';
+
+header('Expires: ' . $gmt_expires);
 header('Content-Type: application/json');
 
 require './components/db.php';

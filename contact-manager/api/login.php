@@ -35,8 +35,6 @@ try {
         require('./components/cookies.php');
         createCookie($pdo, $user["id"]);
         http_response_code(200);
-
-        header("Location: ../contacts", true);
         exit;
     }
     

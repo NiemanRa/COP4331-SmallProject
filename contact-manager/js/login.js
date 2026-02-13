@@ -16,6 +16,16 @@ async function onRegister() {
         username: username,
         password: password
     }));
+
+    req.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (this.status === 200) {
+                window.location.href = "../"
+            } else {
+                // Do alert for invalid registration
+            }
+        }
+    }
 }
 
 async function onLogin() {
@@ -32,7 +42,7 @@ async function onLogin() {
     req.onreadystatechange = function() {
         if (this.readyState === XMLHttpRequest.DONE) {
             if (this.status === 200) {
-                //window.location.href = "../contacts";
+                window.location.href = "../contacts";
             } else {
                 // Do alert bootstrap class div to indicate invalid credentials
             }
