@@ -83,11 +83,6 @@ try {
 
     $message = $pdo->prepare("INSERT INTO users (first_name, last_name, email, username, password_hash) VALUES (?, ?, ?, ?, ?);");
     $message->execute([$firstName, $lastName, $email, $username, $hash]);
-
-    $userId = $pdo->lastInsertId();
-
-    require('./components/cookies.php');
-    createCookie($pdo, $userId);
     exit;
 } catch (\PDOException $e) {
     $errorCode = $e->getCode();
