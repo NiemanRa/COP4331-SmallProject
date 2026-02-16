@@ -26,7 +26,7 @@ $uid = checkCookie($pdo, $user_token);
 
 try{
     // Main contacts query (pagination of 10 contacts at at time)
-    $search = $pdo->prepare("SELECT id,first_name,last_name,email,personal_phone,work_phone FROM contacts WHERE user_id= ? AND (first_name LIKE ? OR last_name LIKE ?) ORDER BY first_name LIMIT ?, ?");
+    $search = $pdo->prepare("SELECT id,first_name,last_name,email,personal_phone,work_phone FROM contacts WHERE user_id= ? AND (first_name LIKE ? OR last_name LIKE ?) ORDER BY first_name, last_name LIMIT ?, ?");
     $search->bindValue(1, $uid, PDO::PARAM_INT);
     $search->bindValue(2, $searchName, PDO::PARAM_STR);
     $search->bindValue(3, $searchName, PDO::PARAM_STR);
@@ -35,8 +35,10 @@ try{
     $search->execute();
     
     // Get number of total contacts that fit the search (so frontend knows number of pages)
-    $total_contact_count_search = $pdo->prepare("SELECT COUNT(*) FROM contacts WHERE user_id= ?");
+    $total_contact_count_search = $pdo->prepare("SELECT COUNT(*) FROM contacts WHERE user_id= ? AND (first_name LIKE ? OR last_name LIKE ?) ORDER BY first_name, last_name");
     $total_contact_count_search->bindValue(1, $uid, PDO::PARAM_INT);
+    $total_contact_count_search->bindValue(2, $searchName, PDO::PARAM_STR);
+    $total_contact_count_search->bindValue(3, $searchName, PDO::PARAM_STR);
     $total_contact_count_search->execute();
     $total_contact_count = $total_contact_count_search->fetchColumn();
     
