@@ -27,7 +27,7 @@ function createCookie (\PDO $pdo, int $userId) {
 }
 
 function deleteCookie (\PDO $pdo, string $token) {
-    if (empty($_token)) {
+    if (empty($token)) {
         http_response_code(401);
         echo json_encode(["error" => "Authentication cookie not provided"]);
         exit;

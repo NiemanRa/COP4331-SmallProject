@@ -26,7 +26,7 @@ $uid = checkCookie($pdo, $user_token);
 
 try{
     // Main contacts query (pagination of 10 contacts at at time)
-    $search = $pdo->prepare("SELECT id,first_name,last_name,email,personal_phone,work_phone FROM contacts WHERE user_id= ? AND (first_name LIKE ? OR last_name LIKE ?) LIMIT ?, ?");
+    $search = $pdo->prepare("SELECT id,first_name,last_name,email,personal_phone,work_phone FROM contacts WHERE user_id= ? AND (first_name LIKE ? OR last_name LIKE ?) ORDER BY first_name LIMIT ?, ?");
     $search->bindValue(1, $uid, PDO::PARAM_INT);
     $search->bindValue(2, $searchName, PDO::PARAM_STR);
     $search->bindValue(3, $searchName, PDO::PARAM_STR);

@@ -230,3 +230,19 @@ async function deleteContact(contact_id) {
     }
 }
 
+async function doLogout() {
+    try {
+        const response = await fetch("../api/logout.php", {
+            method: "POST"});
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        if (response.status === 200) {
+            window.location.href = "../login";
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
