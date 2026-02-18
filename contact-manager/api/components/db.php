@@ -1,5 +1,5 @@
 <?php
-$env = parse_ini_file("../../../.env");
+$env = parse_ini_file( __DIR__ . "/../../../../.env");
 $charset = "utf8";
 
 $dsn = "mysql:host={$env['HOST']};port={$env['PORT']};dbname={$env['DB_NAME']};charset=$charset";
