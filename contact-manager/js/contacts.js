@@ -17,6 +17,18 @@ const firstButton = document.getElementById("first-btn");
 const secondButton = document.getElementById("second-btn");
 const nextButton = document.getElementById("next-btn");
 
+const contactId = document.getElementById("contact-id");
+const firstNameDiv = document.getElementById("first-name-div");
+const lastNameDiv = document.getElementById("last-name-div");
+const phoneNumberDiv = document.getElementById("phone-number-div");
+const workNumberDiv = document.getElementById("work-number-div");
+const emailDiv = document.getElementById("email-div");
+const inputFirstName = document.getElementById("input-first-name");
+const inputLastName = document.getElementById("input-last-name");
+const inputPersonalNumber = document.getElementById("input-personal-number");
+const inputWorkNumber = document.getElementById("input-work-number");
+const inputEmail = document.getElementById("input-email");
+
 prevButton.value = "<";
 nextButton.value = ">";
 firstButton.value = Number(1);
@@ -28,9 +40,39 @@ let page = 1;
 let total_count;
 let query = "";
 
+const mobileView = window.matchMedia("(max-width: 768px)");
+
+function checkView(view) {
+    if (view.matches) {
+        document.getElementById("details-view").classList.add("d-none");
+        document.getElementById("aside").classList.remove("d-none");
+    } else {
+        document.getElementById("details-view").classList.remove("d-none");
+        document.getElementById("aside").classList.remove("d-none");
+        document.getElementById("details-view").classList.add("w-75");
+        document.getElementById("details-view").classList.remove("w-100");
+        document.getElementById("details-card").classList.add("w-50");
+        document.getElementById("details-card").classList.remove("w-75");
+        document.getElementById("details-card").classList.add("w-50");
+        document.getElementById("details-card").classList.remove("w-75");
+        document.getElementById("communication").classList.add("w-50");
+        document.getElementById("communication").classList.remove("w-75");
+        document.getElementById("communication").classList.add("fs-4");
+        document.getElementById("communication").classList.remove("fs-6");
+        document.getElementById("go-back").classList.add("d-none");
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     searchContact(query, page);
+    checkView(mobileView);
 });
+
+mobileView.addEventListener("change", (e) => {
+    checkView(e);
+})
+
+document.getElementById("go-back").addEventListener("click", () => {checkView(mobileView)})
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -82,6 +124,8 @@ form.addEventListener("submit", (e) => {
         workNumberError.textContent = "is invalid";
         valid = false;
         } else {
+        phoneNumber.value = phoneNumber.value.replace(/\D/g, "");
+        phoneNumber.value = phoneNumber.value.slice(0,3)+"-"+phoneNumber.value.slice(3,6)+"-"+phoneNumber.value.slice(6,10);
         workNumberError.parentElement.classList.remove("text-danger");
         workNumberError.textContent = "";
         }
@@ -156,18 +200,13 @@ async function searchContact(searchQuery, pagination) {
         } 
         const data = await response.json();
         total_count = data.total_contact_count;
-        const sorted = data.contacts.sort(function(a,b) {
-            let textA = a.first_name.toLowerCase();
-            let textB = b.first_name.toLowerCase();
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-        })
         const groups = {};
-        for (const contact of sorted) {
+        for (const contact of data.contacts) {
             const letter = contact.first_name[0].toUpperCase();
             if (!groups[letter]) groups[letter] = [];
             groups[letter].push(contact);
         }
-        populateContacts(groups);
+        if (Object.keys(groups).length > 0) populateContacts(groups);
     } catch (error) {
         console.error(error);
     }
@@ -175,20 +214,28 @@ async function searchContact(searchQuery, pagination) {
 
 function populateContacts(groups) {
     document.getElementById("names-list").innerHTML = "";
-    document.getElementById("contact-id").value = Object.values(groups)[0][0].id;
-    document.getElementById("first-name-div").textContent = `${Object.values(groups)[0][0].first_name}`;
-    document.getElementById("last-name-div").textContent = `${Object.values(groups)[0][0].last_name}`;
-    document.getElementById("phone-number-div").textContent = `Phone number: ${Object.values(groups)[0][0].personal_phone}`;
-    document.getElementById("work-number-div").textContent = `Work Number: ${Object.values(groups)[0][0].work_phone}`;
-    document.getElementById("email-div").textContent = `${Object.values(groups)[0][0].email}`;
-    document.getElementById("edit-contact").addEventListener("click", () => {
-        document.getElementById("contact-id").value = Object.values(groups)[0][0].id;
-        document.getElementById("input-first-name").value = `${Object.values(groups)[0][0].first_name}`;
-        document.getElementById("input-last-name").value = `${Object.values(groups)[0][0].last_name}`;
-        document.getElementById("input-personal-number").value = `${Object.values(groups)[0][0].personal_phone}`;
-        document.getElementById("input-work-number").value = `${Object.values(groups)[0][0].work_phone}`;
-        document.getElementById("input-email").value = `${Object.values(groups)[0][0].email}`;
-    })
+    if (firstNameDiv.textContent === "") {
+        document.getElementById("edit-contact").textContent = "Edit";
+        document.getElementById("details-container").classList.remove("d-none");
+
+        contactId.value = Object.values(groups)[0][0].id;
+        firstNameDiv.textContent = `${Object.values(groups)[0][0].first_name}`;
+        lastNameDiv.textContent = `${Object.values(groups)[0][0].last_name}`;
+        phoneNumberDiv.textContent = `${Object.values(groups)[0][0].personal_phone}`;
+        workNumberDiv.textContent = `${Object.values(groups)[0][0].work_phone}`;
+        emailDiv.textContent = `${Object.values(groups)[0][0].email}`;
+        contactId.value = Object.values(groups)[0][0].id;
+        inputFirstName.value = `${Object.values(groups)[0][0].first_name}`;
+        inputLastName.value = `${Object.values(groups)[0][0].last_name}`;
+        inputPersonalNumber.value = `${Object.values(groups)[0][0].personal_phone}`;
+        inputWorkNumber.value = `${Object.values(groups)[0][0].work_phone}`;
+        inputEmail.value = `${Object.values(groups)[0][0].email}`;
+
+        document.getElementById("msg-icon").href = `sms:${phoneNumberDiv.textContent}`;
+        document.getElementById("phone-icon").href = `tel:${phoneNumberDiv.textContent}`;
+        document.getElementById("email-icon").href = `mailto:${emailDiv.textContent}`;
+        checkDetails();
+    };
     Object.entries(groups).forEach(([Letter, Group]) => {
         const letterContainer = document.createElement("div");
         letterContainer.className = "w-100 d-flex h-auto border-bottom";
@@ -211,21 +258,28 @@ function populateContacts(groups) {
 
         Group.forEach((contact) => {
             const element = document.createElement("a");
-            element.className = "w-100 p-2 text-decoration-none ";
+            element.className = "w-100 p-2 text-decoration-none overflow-x-scroll";
             element.id = `${contact.id}`
             element.href = "#"
             const arrayPosition = Group.indexOf(contact);
             element.addEventListener("click", () => {
                 getContactDetails(contact.id, Group, arrayPosition);
+                if (mobileView.matches === true) {
+                    document.getElementById("aside").classList.add("d-none");
+                    document.getElementById("details-view").classList.remove("d-none");
+                    document.getElementById("details-view").classList.remove("w-75");
+                    document.getElementById("details-view").classList.add("w-100");
+                    document.getElementById("go-back").classList.remove("d-none");
+                }
             })
-            element.textContent = `${contact.first_name}`;
+            element.textContent = `${contact.first_name} ${contact.last_name}`;
             contactList.appendChild(element);
         })
     });
-    console.log((total_count))
     if (total_count <= 10) {
         document.getElementById("pagination-container").classList.add("d-none")
     } else {
+        document.getElementById("pagination-container").classList.remove("d-none")
         secondButton.value < Math.ceil(total_count/10) ? nextButton.classList.remove("d-none") : nextButton.classList.add("d-none")
         firstButton.value > 1 ? prevButton.classList.remove("d-none") : prevButton.classList.add("d-none")
     }
@@ -261,32 +315,60 @@ document.querySelectorAll(".btn-outline-primary").forEach((btn) => {
 
 
 function getContactDetails(contact_id, contacts, arrayPosition) {
-    document.getElementById("contact-id").value = contact_id;
-    document.getElementById("first-name-div").textContent = `${contacts[arrayPosition].first_name}`;
-    document.getElementById("last-name-div").textContent = `${contacts[arrayPosition].last_name}`;
-    document.getElementById("phone-number-div").textContent = `Phone number: ${contacts[arrayPosition].personal_phone}`;
-    document.getElementById("work-number-div").textContent = `Work Number: ${contacts[arrayPosition].work_phone}`;
-    document.getElementById("email-div").textContent = `Email: ${contacts[arrayPosition].email}`;
-    document.getElementById("edit-contact").addEventListener("click", () => {
-        document.getElementById("contact-id").value = contact_id;
-        document.getElementById("input-first-name").value = `${contacts[arrayPosition].first_name}`;
-        document.getElementById("input-last-name").value = `${contacts[0].last_name}`;
-        document.getElementById("input-personal-number").value = `${contacts[0].personal_phone}`;
-        document.getElementById("input-work-number").value = `${contacts[0].work_phone}`;
-        document.getElementById("input-email").value = `${contacts[0].email}`;
-    })
+    contactId.value = contact_id;
+    firstNameDiv.textContent = `${contacts[arrayPosition].first_name}`;
+    lastNameDiv.textContent = `${contacts[arrayPosition].last_name}`;
+    phoneNumberDiv.textContent = `${contacts[arrayPosition].personal_phone}`;
+    workNumberDiv.textContent = `${contacts[arrayPosition].work_phone}`;
+    emailDiv.textContent = `${contacts[arrayPosition].email}`;
+    inputFirstName.value = `${contacts[arrayPosition].first_name}`;
+    inputLastName.value = `${contacts[arrayPosition].last_name}`;
+    inputPersonalNumber.value = `${contacts[arrayPosition].personal_phone}`;
+    inputWorkNumber.value = `${contacts[arrayPosition].work_phone}`;
+    inputEmail.value = `${contacts[arrayPosition].email}`;
+
+    document.getElementById("msg-icon").href = `sms:${phoneNumberDiv.textContent}`;
+    document.getElementById("phone-icon").href = `tel:${phoneNumberDiv.textContent}`;
+    document.getElementById("email-icon").href = `mailto:${emailDiv.textContent}`;
+    checkDetails();
+}
+
+function checkDetails() {
+    if (emailDiv.textContent === "") {
+        document.getElementById("email-icon").classList.add("d-none");
+        document.getElementById("email-details").classList.add("d-none");
+    } else {
+        document.getElementById("email-icon").classList.remove("d-none");
+        document.getElementById("email-details").classList.remove("d-none");
+    }
+
+    if (workNumberDiv.textContent === "") {
+        document.getElementById("work-number-details").classList.add("d-none");
+    } else {
+        document.getElementById("work-number-details").classList.remove("d-none");
+    }
 }
 
 document.getElementById("update-contact").addEventListener("click", () => {
     const contact = {
-        contact_id: document.getElementById("contact-id").value,
-        first_name: document.getElementById("input-first-name").value,
-        last_name: document.getElementById("input-last-name").value,
-        email: document.getElementById("input-email").value,
-        personal_phone: document.getElementById("input-personal-number").value,
-        work_phone: document.getElementById("input-work-number").value,
+        contact_id: contactId.value,
+        first_name: inputFirstName.value,
+        last_name: inputLastName.value,
+        email: inputEmail.value,
+        personal_phone: inputPersonalNumber.value,
+        work_phone: inputWorkNumber.value,
     }
-    updateContact(contact);
+    updateContact(contact).then((ok) => {
+        if (ok) {
+            searchContact(query, page);
+            firstNameDiv.textContent = `${contact.first_name}`;
+            lastNameDiv.textContent = `${contact.last_name}`;
+            phoneNumberDiv.textContent = `${contact.personal_phone}`;
+            workNumberDiv.textContent = `${contact.work_phone}`;
+            emailDiv.textContent = `${contact.email}`;
+            document.getElementById("update-close").click();
+        }
+    });
 });
 
 async function updateContact(contact) {
@@ -302,14 +384,18 @@ async function updateContact(contact) {
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
+        return true
     } catch (error) {
         console.error(error.message);
+        return false
     }
 }
 
 document.getElementById("delete-button").addEventListener("click", () => {
-    const contact_id = document.getElementById("contact-id").value;
-    deleteContact(contact_id);
+    const contact_id = contactId.value;
+    deleteContact(contact_id).then((ok) => {
+        if (ok) location.reload();
+    });
 })
 
 async function deleteContact(contact_id) {
@@ -325,18 +411,28 @@ async function deleteContact(contact_id) {
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-        searchContact(query, page);
+        return true
     } catch (error) {
         console.error(error.message);
+        return false
     }
 }
 
 searchButton.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         query = searchButton.value;
+        page = 1;
+        firstButton.value = Number(1);
+        firstButton.textContent = firstButton.value;
+        secondButton.value = Number(2);
+        secondButton.textContent = secondButton.value
+        firstButton.classList.add("active");
+        secondButton.classList.remove("active");
         searchContact(query, page)
+        checkView(mobileView);
     }
 })
+
 async function doLogout() {
     try {
         const response = await fetch("../api/logout.php", {
@@ -353,3 +449,6 @@ async function doLogout() {
     }
 }
 
+document.getElementById("logout").addEventListener("click", () => {
+    doLogout();
+})
