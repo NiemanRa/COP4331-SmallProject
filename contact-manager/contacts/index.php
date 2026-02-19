@@ -77,26 +77,26 @@ include_once("../api/components/validatesession.php");
                     <h5 class="modal-title">Edit Contact</h5>
                     <button id="update-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="Add-Contact-Form" class="modal-body d-flex flex-column justify-content-center px-5 gap-2">
+                <form id="Update-Contact-Form" class="modal-body d-flex flex-column justify-content-center px-5 gap-2">
                     <div class="d-flex flex-column">
-                        <label>First Name <span id="First-Name-Error"></span></label>
-                        <input id="input-first-name" class="form-control" id="First" type="text"/>
+                        <label>First Name <span id="Update-First-Name-Error"></span></label>
+                        <input id="input-first-name" class="form-control" type="text"/>
                     </div>
                     <div class="d-flex flex-column">
-                        <label>Last Name <span id="Last-Name-Error"></span></label>
-                        <input id="input-last-name" class="form-control" id="Last" type="text">
+                        <label>Last Name <span id="Update-Last-Name-Error"></span></label>
+                        <input id="input-last-name" class="form-control" type="text">
                     </div>
                     <div class="d-flex flex-column">
-                        <label>Email <span id="Email-Error"></span></label>
-                        <input id="input-email" class="form-control" id="Email" type="email">
+                        <label>Email <span id="Update-Email-Error"></span></label>
+                        <input id="input-email" class="form-control" type="email">
                     </div>
                     <div class="d-flex flex-column">
-                        <label>Phone Number <span id="Phone-Number-Error"></span></label>
-                        <input id="input-personal-number" class="form-control" id="Phone-Number" type="tel">
+                        <label>Phone Number <span id="Update-Phone-Number-Error"></span></label>
+                        <input id="input-personal-number" class="form-control" type="tel">
                     </div>
                     <div class="d-flex flex-column">
-                        <label>Work Number <span id="Work-Number-Error"></span></label>
-                        <input id="input-work-number" class="form-control" id="Work-Number" type="tel">
+                        <label>Work Number <span id="Update-Work-Number-Error"></span></label>
+                        <input id="input-work-number" class="form-control" type="tel">
                     </div>
                     <div id="contact-id" class="d-none"></div>
                     <button type="submit" class="btn btn-primary mt-3" id="update-contact" >Update Contact</button>
