@@ -1,4 +1,4 @@
-const form = document.getElementById("Add-Contact-Form");
+const addform = document.getElementById("Add-Contact-Form");
 const searchButton = document.getElementById("search");
 const firstName = document.getElementById("First");
 const lastName = document.getElementById("Last");
@@ -11,6 +11,12 @@ const lastNameError = document.getElementById("Last-Name-Error");
 const emailError = document.getElementById("Email-Error");
 const phoneNumberError = document.getElementById("Phone-Number-Error");
 const workNumberError = document.getElementById("Work-Number-Error");
+
+const updateFirstNameError = document.getElementById("Update-First-Name-Error");
+const updateLastNameError = document.getElementById("Update-Last-Name-Error");
+const updateEmailError = document.getElementById("Update-Email-Error");
+const updatePhoneNumberError = document.getElementById("Update-Phone-Number-Error");
+const updateWorkNumberError = document.getElementById("Update-Work-Number-Error");
 
 const prevButton = document.getElementById("prev-btn");
 const firstButton = document.getElementById("first-btn");
@@ -74,10 +80,10 @@ mobileView.addEventListener("change", (e) => {
 
 document.getElementById("go-back").addEventListener("click", () => {checkView(mobileView)})
 
-form.addEventListener("submit", (e) => {
+function validateForm(e, first, phone_number, work_number, email, firstNameError, phoneNumberError, workNumberError, emailError) {
     e.preventDefault();
     let valid = true;
-    if (firstName.value === null || firstName.value === "") {
+    if (first.value === null || first.value === "") {
         firstNameError.parentElement.classList.add("text-danger");
         firstNameError.textContent = " is required*";
         valid = false;
@@ -101,51 +107,61 @@ form.addEventListener("submit", (e) => {
         emailError.textContent = "";
     }
 
-    if (phoneNumber.value === null || phoneNumber.value === "") {
+    if (phone_number.value === null || phone_number.value === "") {
         phoneNumberError.parentElement.classList.add("text-danger");
         phoneNumberError.textContent = "is required*";
         valid = false;
     }  else {
         const phoneRegex = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$/;
-        if (phoneRegex.test(phoneNumber.value) === false) {
+        if (phoneRegex.test(phone_number.value) === false) {
             phoneNumberError.parentElement.classList.add("text-danger");
             phoneNumberError.textContent = "is invalid";
             valid = false;
         } else {
-        phoneNumberError.parentElement.classList.remove("text-danger");
-        phoneNumberError.textContent = "";
+            phone_number.value = phone_number.value.replace(/\D/g, "");
+            phone_number.value = phone_number.value.slice(0,3)+"-"+phone_number.value.slice(3,6)+"-"+phone_number.value.slice(6,10);
+            phoneNumberError.parentElement.classList.remove("text-danger");
+            phoneNumberError.textContent = "";
         }
     }
 
-    if (workNumber.value !== "") {
+    if (work_number.value !== "") {
         const phoneRegex = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$/;
-        if (phoneRegex.test(workNumber.value) === false) {
+        if (phoneRegex.test(work_number.value) === false) {
         workNumberError.parentElement.classList.add("text-danger");
         workNumberError.textContent = "is invalid";
         valid = false;
         } else {
-        phoneNumber.value = phoneNumber.value.replace(/\D/g, "");
-        phoneNumber.value = phoneNumber.value.slice(0,3)+"-"+phoneNumber.value.slice(3,6)+"-"+phoneNumber.value.slice(6,10);
-        workNumberError.parentElement.classList.remove("text-danger");
-        workNumberError.textContent = "";
+            work_number.value = work_number.value.replace(/\D/g, "");
+            work_number.value = work_number.value.slice(0,3)+"-"+work_number.value.slice(3,6)+"-"+work_number.value.slice(6,10);
+            workNumberError.parentElement.classList.remove("text-danger");
+            workNumberError.textContent = "";
         }
     }  else {
         workNumberError.parentElement.classList.remove("text-danger");
         workNumberError.textContent = "";
     }
+    
+    console.log(valid)
+    return valid
+}
 
-    if (valid === false) {
-        return
-    } else {
-        addContact()
-    }
+addform.addEventListener("submit", (e) => {
+    validateForm(e, firstName, phoneNumber, workNumber, email, firstNameError, phoneNumberError, workNumberError, emailError).then((ok) => {
+        if (ok) {
+            addContact();
+        } else {
+            return
+        }
+    });
 });
 
+function checkIfNull(input) {
+    const value = input.value.trim();
+    return value === "" ? "" : value; 
+};
+
 async function addContact() {
-    function checkIfNull(input) {
-        const value = input.value.trim();
-        return value === "" ? "" : value; 
-    };
     const submission = JSON.stringify({
                 first_name: checkIfNull(firstName),
                 last_name: checkIfNull(lastName),
@@ -206,7 +222,11 @@ async function searchContact(searchQuery, pagination) {
             if (!groups[letter]) groups[letter] = [];
             groups[letter].push(contact);
         }
-        if (Object.keys(groups).length > 0) populateContacts(groups);
+        if (Object.keys(groups).length > 0) {
+            populateContacts(groups)
+        } else {
+            document.getElementById("pagination-container").classList.add("d-none");
+        }
     } catch (error) {
         console.error(error);
     }
@@ -349,29 +369,36 @@ function checkDetails() {
     }
 }
 
-document.getElementById("update-contact").addEventListener("click", () => {
-    const contact = {
-        contact_id: contactId.value,
-        first_name: inputFirstName.value,
-        last_name: inputLastName.value,
-        email: inputEmail.value,
-        personal_phone: inputPersonalNumber.value,
-        work_phone: inputWorkNumber.value,
-    }
-    updateContact(contact).then((ok) => {
-        if (ok) {
-            searchContact(query, page);
-            firstNameDiv.textContent = `${contact.first_name}`;
-            lastNameDiv.textContent = `${contact.last_name}`;
-            phoneNumberDiv.textContent = `${contact.personal_phone}`;
-            workNumberDiv.textContent = `${contact.work_phone}`;
-            emailDiv.textContent = `${contact.email}`;
+document.getElementById("Update-Contact-Form").addEventListener("submit", (e) => {
+    if (validateForm(e, inputFirstName, inputPersonalNumber, inputWorkNumber, inputEmail, updateFirstNameError, updatePhoneNumberError, updateWorkNumberError, updateEmailError) === true) {
             document.getElementById("update-close").click();
-        }
-    });
+            updateContact().then((ok) => {
+                if (ok) {
+                console.log("hello")
+                firstNameDiv.textContent = `${inputFirstName.value}`;
+                lastNameDiv.textContent = `${inputLastName.value}`;
+                phoneNumberDiv.textContent = `${inputPersonalNumber.value}`;
+                workNumberDiv.textContent = `${inputWorkNumber.value}`;
+                emailDiv.textContent = `${inputEmail.value}`;
+                checkDetails();
+                searchContact(query, page);
+                } else {
+                    return
+                }
+            });
+    };
 });
 
-async function updateContact(contact) {
+async function updateContact() {
+    const submission = {
+        contact_id: contactId.value,
+        first_name: checkIfNull(inputFirstName),
+        last_name: checkIfNull(inputLastName),
+        email: checkIfNull(inputEmail),
+        personal_phone: checkIfNull(inputPersonalNumber),
+        work_phone: checkIfNull(inputWorkNumber)
+    }
+    console.log(submission)
     try {
         const response = await fetch("../api/contacts/update.php", {
             method:"POST",
@@ -379,7 +406,7 @@ async function updateContact(contact) {
                 "Content-Type": "application/json"
             },
             credentials: "same-origin",
-            body: JSON.stringify(contact)
+            body: JSON.stringify(submission)
         });
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
